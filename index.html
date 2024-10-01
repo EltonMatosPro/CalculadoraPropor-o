@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Proporção de Tinta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .calculator-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h2>Calculadora de Tinta Bi-componente</h2>
+
+        <label for="relacaoA">Relação de Mistura (Componente A):</label>
+        <input type="number" step="0.01" id="relacaoA" placeholder="Digite a relação da tinta (ex: 6)">
+
+        <label for="relacaoB">Relação de Mistura (Componente B):</label>
+        <input type="number" step="0.01" id="relacaoB" placeholder="Digite a relação do catalisador (ex: 1)">
+
+        <label for="volumeDesejado">Volume desejado (em litros):</label>
+        <input type="number" step="0.01" id="volumeDesejado" value="1" placeholder="Digite o volume desejado">
+
+        <label for="proporcaoDiluente">Proporção de Diluente (%):</label>
+        <input type="number" step="0.01" id="proporcaoDiluente" placeholder="Digite a proporção de diluente (até 20%)">
+
+        <button onclick="calcularProporcao()">Calcular Proporção</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calcularProporcao() {
+            const relacaoA = parseFloat(document.getElementById('relacaoA').value);
+            const relacaoB = parseFloat(document.getElementById('relacaoB').value);
+            const volumeDesejado = parseFloat(document.getElementById('volumeDesejado').value);
+            const proporcaoDiluente = parseFloat(document.getElementById('proporcaoDiluente').value);
+
+            if (relacaoA > 0 && relacaoB > 0 && volumeDesejado > 0) {
+                const totalPartes = relacaoA + relacaoB;
+
+                // Calcula a proporção de cada componente
+                const tintaA = (relacaoA / totalPartes) * volumeDesejado;
+                const catalisadorB = (relacaoB / totalPartes) * volumeDesejado;
+
+                // Calcula a quantidade de diluente, baseado na proporção máxima permitida
+                const diluente = (proporcaoDiluente > 0 && proporcaoDiluente <= 20) ? (proporcaoDiluente / 100) * volumeDesejado : 0;
+
+                // Exibe o resultado
+                document.getElementById('result').innerHTML = `
+                    <p><strong>Para ${volumeDesejado} litro(s) de tinta:</strong></p>
+                    <p><strong>Tinta (Componente A):</strong> ${tintaA.toFixed(2)} litros</p>
+                    <p><strong>Catalisador (Componente B):</strong> ${catalisadorB.toFixed(2)} litros</p>
+                    <p><strong>Diluente:</strong> ${diluente.toFixed(2)} litros (com base em ${proporcaoDiluente}% de diluição)</p>
+                `;
+            } else {
+                document.getElementById('result').innerHTML = '<p style="color: red;">Por favor, insira valores válidos para todos os campos!</p>';
+            }
+        }
+    </script>
+</body>
+</html>
+
